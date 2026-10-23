@@ -1,69 +1,98 @@
 import { useEffect, useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
+import { ArrowRight, LogoMark } from './icons';
+import './Header.css';
 
-const links = [
-  { to: '/about', label: 'The story' },
-  { to: '/forms', label: 'Art forms' },
+const nav = [
+  { to: '/', label: 'Home' },
+  { to: '/classes', label: 'Classes' },
+  { to: '/dancers', label: 'Dancers' },
   { to: '/events', label: 'Events' },
-  { to: '/faq', label: 'FAQ' },
-  { to: '/connect', label: 'Connect' },
+  { to: '/about', label: 'About' },
+  { to: '/contact', label: 'Contact' },
 ];
 
 export function Header() {
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
 
+  useEffect(() => setOpen(false), [location.pathname]);
+
   useEffect(() => {
-    setMenuOpen(false);
-  }, [location.pathname]);
+    const onScroll = () => setScrolled(window.scrollY > 12);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  useEffect(() => {
+    document.body.style.overflow = open ? 'hidden' : '';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [open]);
 
   return (
-    <>
-      <a className="skip-link" href="#main">
-        Skip to content
-      </a>
-      <header className="site-header">
-        <div className="site-header__inner">
-          <Link className="wordmark" to="/" aria-label="Academy Dance Studio home">
-            <span className="wordmark__name">Academy</span>
-            <span className="wordmark__descriptor">Dance Studio</span>
-          </Link>
+    <header className={`site-header ${scrolled ? 'is-scrolled' : ''}`}>
+      <div className="container header-inner">
+        <Link to="/" className="brand" aria-label="Rhythm Dance Studio — home">
+          <LogoMark className="brand-mark" />
+          <span className="brand-text">
+            <span className="brand-name">Rhythm</span>
+            <span className="brand-sub">Dance Studio</span>
+          </span>
+        </Link>
 
+        <nav className="main-nav" aria-label="Primary">
+          {nav.map((item) => (
+            <NavLink
+              key={item.to}
+              to={item.to}
+              end={item.to === '/'}
+              className={({ isActive }) => `nav-link ${isActive ? 'is-active' : ''}`}
+            >
+              {item.label}
+            </NavLink>
+          ))}
+        </nav>
+
+        <div className="header-actions">
+          <Link to="/contact" className="btn btn-dark btn-join">
+            Join Us <ArrowRight />
+          </Link>
           <button
-            className="menu-toggle"
             type="button"
-            aria-expanded={menuOpen}
-            aria-controls="primary-navigation"
-            aria-label={menuOpen ? 'Close navigation menu' : 'Open navigation menu'}
-            onClick={() => setMenuOpen((open) => !open)}
+            className={`menu-toggle ${open ? 'is-open' : ''}`}
+            aria-expanded={open}
+            aria-controls="mobile-nav"
+            aria-label={open ? 'Close menu' : 'Open menu'}
+            onClick={() => setOpen((v) => !v)}
           >
             <span />
             <span />
           </button>
-
-          <nav
-            className={`primary-navigation${menuOpen ? ' primary-navigation--open' : ''}`}
-            id="primary-navigation"
-            aria-label="Main navigation"
-          >
-            <NavLink to="/" end className={({ isActive }) => `navigation-link${isActive ? ' is-active' : ''}`}>
-              Home
-            </NavLink>
-            {links.map((link) => (
-              <NavLink
-                key={link.to}
-                to={link.to}
-                className={({ isActive }) => `navigation-link${isActive ? ' is-active' : ''}`}
-              >
-                {link.label}
-              </NavLink>
-            ))}
-            <Link className="navigation-cta" to="/forms">
-              Discover the forms <span aria-hidden="true">↗</span>
-            </Link>
-          </nav>
         </div>
-      </header>
-    </>
+      </div>
+
+      <div id="mobile-nav" className={`mobile-nav ${open ? 'is-open' : ''}`}>
+        <nav aria-label="Mobile">
+          {nav.map((item, i) => (
+            <NavLink
+              key={item.to}
+              to={item.to}
+              end={item.to === '/'}
+              style={{ transitionDelay: open ? `${80 + i * 50}ms` : '0ms' }}
+              className={({ isActive }) => `mobile-link ${isActive ? 'is-active' : ''}`}
+            >
+              {item.label}
+            </NavLink>
+          ))}
+          <Link to="/contact" className="btn btn-dark mobile-join">
+            Join Us <ArrowRight />
+          </Link>
+        </nav>
+      </div>
+    </header>
   );
 }

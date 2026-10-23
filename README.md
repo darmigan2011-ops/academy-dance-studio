@@ -1,20 +1,19 @@
-# Academy Dance Studio — preview website
+# Rhythm Dance Studio
 
-An independent React, TypeScript and Vite website concept for Academy Dance Studio. The preview explores an editorial digital home for Indian classical dance, music and community, with dedicated sections for Bharatanatyam and Kuchipudi.
+This repository publishes the recovered Rhythm Dance Studio website at the Academy Dance Studio GitHub Pages address. The original Rhythm branding, page content, styling, interactions and locally stored dance photography are preserved.
 
-## Preview
+## Live site and source
 
 - Live site: <https://darmigan2011-ops.github.io/academy-dance-studio/>
-- Source: <https://github.com/darmigan2011-ops/academy-dance-studio>
-
-The site uses hash-based routes so each page can be opened directly or refreshed on GitHub Pages. Example: `https://darmigan2011-ops.github.io/academy-dance-studio/#/forms`.
+- Repository: <https://github.com/darmigan2011-ops/academy-dance-studio>
+- Recovered source snapshot: `dfa9df8`
 
 ## Run locally
 
 Requires Node.js 20 or newer.
 
 ```bash
-npm install
+npm ci
 npm run dev
 ```
 
@@ -25,20 +24,13 @@ npm run build
 npm run preview
 ```
 
-## Technology
+## Technology and deployment
 
-- React 19
-- TypeScript
-- Vite
-- React Router (`HashRouter`) for GitHub Pages-compatible direct routes and refreshes
-- Plain CSS, responsive layouts, reduced-motion support, semantic landmarks and keyboard-visible focus states
+- React 19, TypeScript, Vite and React Router
+- Responsive CSS with the original serif typography, editorial sections and motion effects
+- Vite's base path is `/academy-dance-studio/` for the GitHub Pages project URL
+- `.github/workflows/deploy.yml` builds and publishes `dist/`, and provides a `404.html` fallback for direct React Router routes
 
-## Content notes
+## Photography
 
-The requested preview name is Academy Dance Studio. The reference notes available during implementation identify Sanāda Space, and do not establish a relationship to Academy Dance Studio. Accordingly, no Sanāda founders, event details, social accounts, poster or portraits are attributed to Academy. Academy-specific history, teachers, classes, event dates, venue and contact details were not supplied; the site states this clearly and does not invent them. Bharatanatyam and Kuchipudi descriptions are general art-form context, not confirmation of Academy offerings.
-
-The dance photographs are independently sourced illustrative references, not Academy members and not endorsements. Individual photographer and license credits are displayed with the images and recorded in `public/images/ATTRIBUTION.md`.
-
-## Deployment
-
-The GitHub Actions workflow at `.github/workflows/deploy.yml` builds the Vite site with `/academy-dance-studio/` as its base and publishes the `dist/` directory to GitHub Pages. The app uses hash-based routing, so direct links and refreshes stay on the published `index.html` and do not depend on a server-side SPA fallback.
+The site uses locally stored Pexels photography. Photo sources and the original image notes are recorded in `public/images/IMAGE-SOURCES.md`.
